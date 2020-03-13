@@ -25,5 +25,60 @@ code {
 }
 
 .leaflet-popup-content-wrapper {
-    border-radius: 3px;
+    border-radius: 5px !important;
+}
+
+.preloader {
+    padding-top: 30px;
+    height: 40px;
+    width: 40px;
+    border: 4px solid #bee3f8;
+    border-top-color: #63b3ed;
+    border-radius: 20px;
+    animation: spin 750ms linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    from {
+        transform: rotate(-360deg);
+    }
+}
+
+.sidebar {
+    position: relative;
+    width: 350px;
+}
+
+.sidebar-controler {
+    display: none;
+}
+
+.close-sidebar {
+    display: none;
+}
+
+@media screen and (max-width: 990px) {
+    .sidebar {
+        position: absolute;
+        top: 0;
+        right: -350px;
+        z-index: 9999999;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar.open {
+        right: 0;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+    .sidebar-controler {
+        display: flex;
+    }
+    .close-sidebar {
+        display: block;
+    }
 }

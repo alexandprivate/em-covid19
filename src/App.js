@@ -1,29 +1,42 @@
 import React from "react";
 import EmMap from "./map";
+import Preloader from "./preloader";
 import useStats from "./useStats";
 import useCountries from "./useCountries";
+import { FiMapPin, FiSearch } from "react-icons/fi";
 
 function Title({ lastUpdate }) {
     let m = new Date(lastUpdate).getMonth() + 1;
     let d = new Date(lastUpdate).getDate();
     let y = new Date(lastUpdate).getFullYear();
     return (
-        <h1 className="text-center mt-5 pb-5 text-2xl leading-none text-gray-700">
-            Covid-19 Worldwide Stats
-            <br />
-            <span className="font-bold leading-relaxed mt-1 text-blue-400 uppercase leading-relaxed text-sm block">
-                Everymundo
-            </span>
-            <p className="text-xs text-gray-500">
-                last update: {m}/{d}/{y}
-            </p>
-        </h1>
+        <div className="py-5 text-gray-700 text-center">
+            <h1 className="uppercase text-center uppercase pb-2 text-2xl leading-none text-gray-700">
+                COVID19 Stats
+            </h1>
+            <div className="flex flex-col">
+                <span className="font-bold uppercase leading-relaxed text-blue-400 uppercase leading-relaxed text-sm block">
+                    Everymundo
+                </span>
+                <span className="text-xs text-gray-600">
+                    Last update: {m}/{d}/{y}
+                </span>
+            </div>
+        </div>
     );
 }
 
-function Card({ type, value, color = "blue-400", percentage = "" }) {
+function Card({
+    type,
+    value,
+    color = "blue-400",
+    percentage = "",
+    noBorderRight = false
+}) {
     return (
-        <div className={`w-full p-5 border-t border-r`}>
+        <div
+            className={`w-full p-5 border-t ${noBorderRight ? "" : "border-r"}`}
+        >
             <p className={`text-4xl font-bold leading-none text-${color}`}>
                 {value}
             </p>
@@ -44,11 +57,12 @@ function CountryListItem({
 }) {
     return (
         <>
-            <span className="text-base">
+            <span className="text-base flex items-center font-bold">
+                <FiMapPin className="text-black mr-1" />
                 {provinceState ? <span>{provinceState}, </span> : ""}
                 {countryRegion}
             </span>
-            <span className="flex items-center justify-between mt-2 block text-left leading-none">
+            <span className="flex items-center justify-between mt-3 block text-left leading-none">
                 <span className="mb-1 block text-sm  flex-1">
                     Confirmed
                     <span className="font-bold block text-blue-500 text-base mt-1">
@@ -74,10 +88,28 @@ function CountryListItem({
 
 function CountryList() {
     const { countries, loading } = useCountries();
+    const [filter, setFilter] = React.useState("");
+
+    let filtered = countries.filter(({ countryRegion }) =>
+        countryRegion.toLowerCase().includes(filter.toLowerCase())
+    );
+    console.log({ filtered });
+
     return (
-        <div className="overflow-auto h-auto border-t">
-            {loading && <p>Loading...</p>}
-            {countries.map(
+        <div className="overflow-auto h-full h-auto border-t">
+            {loading && <Preloader />}
+            <div className="px-5 bg-white flex items-center justify-center py-3 sticky top-0">
+                <button className="pointer-events-none h-12 px-2 border-t border-l border-b rounded-l bg-gray-200 text-gray-700">
+                    <FiSearch></FiSearch>
+                </button>
+                <input
+                    type="search"
+                    onChange={e => setFilter(e.target.value)}
+                    placeholder="Search country"
+                    className="w-full h-12 px-4 bg-gray-200 border rounded-r text-lg"
+                />
+            </div>
+            {filtered.map(
                 (
                     {
                         deaths,
@@ -104,10 +136,16 @@ function CountryList() {
 }
 
 export default function App() {
-    let { stats, loading } = useStats();
-    const { loading: mapLoading } = useCountries();
+    let { stats, loading } = useStats(null);
+    const [sidebar, setSidebar] = React.useState(false);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading)
+        return (
+            <div className="h-screen w-full">
+                <Preloader />
+            </div>
+        );
+
     let { value: confirmed } = stats.confirmed;
     let { value: recovered } = stats.recovered;
     let { value: deaths } = stats.deaths;
@@ -116,13 +154,21 @@ export default function App() {
     let morbility = ((Number(deaths) * 100) / Number(confirmed)).toFixed(2);
     let recovery = ((Number(recovered) * 100) / Number(confirmed)).toFixed(2);
 
-    if (mapLoading) return <p>Loading...</p>;
-
     return (
         <div className="flex items-start h-screen w-full text-gray-700">
-            <div className="h-screen flex flex-col" style={{ width: 350 }}>
+            <div
+                className={`h-screen flex flex-col border-r bg-white sidebar ${
+                    sidebar ? "open" : ""
+                }`}
+            >
+                <button
+                    className="absolute top-0 left-0 text-xl h-8 w-8 close-sidebar"
+                    onClick={() => setSidebar(false)}
+                >
+                    &times;
+                </button>
                 <Title lastUpdate={lastUpdate} />
-                <Card type="Confirmed" value={confirmed} />
+                <Card type="Confirmed" value={confirmed} noBorderRight />
                 <div className="flex items-center">
                     <Card
                         color="green-400"
@@ -136,11 +182,12 @@ export default function App() {
                         type="Deaths"
                         value={deaths}
                         percentage={`${morbility}%`}
+                        noBorderRight
                     />
                 </div>
                 <CountryList />
             </div>
-            <EmMap />
+            <EmMap sidebar={sidebar} setSidebar={setSidebar} />
         </div>
     );
 }
