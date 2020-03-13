@@ -10,16 +10,12 @@ function Title({ lastUpdate }) {
     let d = new Date(lastUpdate).getDate();
     let y = new Date(lastUpdate).getFullYear();
     return (
-        <div className="py-5 text-gray-700 text-center">
-            <h1 className="uppercase text-center uppercase pb-2 text-2xl leading-none text-gray-700">
-                COVID19 Stats
+        <div className="py-5 text-center">
+            <h1 className="uppercase text-center uppercase pb-2 text-2xl leading-none">
+                COVID-19 Stats
             </h1>
             <div className="flex flex-col">
-                {/* <span className="font-bold uppercase leading-relaxed text-blue-400 uppercase leading-relaxed text-sm block">
-                    <span className="text-gray-600 font-normal">Every</span>
-                    mundo
-                </span> */}
-                <span className="text-xs text-gray-600">
+                <span className="text-xs text-gray-500">
                     Last update: {m}/{d}/{y}
                 </span>
             </div>
@@ -32,16 +28,23 @@ function Card({
     value,
     color = "blue-400",
     percentage = "",
-    noBorderRight = false
+    noBorderRight = false,
+    sm = false
 }) {
     return (
         <div
-            className={`w-full p-5 border-t ${noBorderRight ? "" : "border-r"}`}
+            className={`w-full border-gray-900 p-5 border-t ${
+                noBorderRight ? "" : "border-r"
+            }`}
         >
-            <p className={`text-4xl font-bold leading-none text-${color}`}>
+            <p
+                className={`${
+                    sm ? "text-xl" : "text-4xl"
+                } font-bold leading-none text-${color}`}
+            >
                 {value}
             </p>
-            <p className={`text-xl leading-none mt-2`}>
+            <p className={`text-lg leading-none mt-2`}>
                 {type}{" "}
                 <span className="font-bold block mt-1">{percentage}</span>
             </p>
@@ -59,7 +62,7 @@ function CountryListItem({
     return (
         <>
             <span className="text-base flex items-center font-bold">
-                <FiMapPin className="text-black mr-1" />
+                <FiMapPin className="text-gray-500 mr-1" />
                 {provinceState ? <span>{provinceState}, </span> : ""}
                 {countryRegion}
             </span>
@@ -97,17 +100,17 @@ function CountryList() {
     console.log({ filtered });
 
     return (
-        <div className="overflow-auto h-full h-auto border-t">
+        <div className="overflow-auto h-full h-auto border-t border-gray-900">
             {loading && <Preloader />}
-            <div className="px-5 bg-white flex items-center justify-center py-3 sticky top-0">
-                <button className="pointer-events-none h-12 px-2 border-t border-l border-b rounded-l bg-gray-200 text-gray-700">
+            <div className="px-5 bg-gray-800 flex items-center justify-center py-3 sticky top-0">
+                <button className="pointer-events-none h-12 px-2 border-t border-l border-b border-gray-900 rounded-l bg-gray-700 ">
                     <FiSearch></FiSearch>
                 </button>
                 <input
                     type="search"
                     onChange={e => setFilter(e.target.value)}
                     placeholder="Search country"
-                    className="w-full h-12 px-4 bg-gray-200 border rounded-r text-lg"
+                    className="w-full h-12 px-4 border-gray-900 bg-gray-700 border rounded-r text-lg"
                 />
             </div>
             {filtered.map(
@@ -121,7 +124,10 @@ function CountryList() {
                     },
                     index
                 ) => (
-                    <div className="w-full border-b px-5 py-3" key={index}>
+                    <div
+                        className="w-full border-b border-gray-900 px-5 py-3"
+                        key={index}
+                    >
                         <CountryListItem
                             deaths={deaths}
                             confirmed={confirmed}
@@ -154,11 +160,15 @@ export default function App() {
 
     let morbility = ((Number(deaths) * 100) / Number(confirmed)).toFixed(2);
     let recovery = ((Number(recovered) * 100) / Number(confirmed)).toFixed(2);
+    let stillSick = (
+        ((Number(confirmed) - Number(recovered)) * 100) /
+        Number(confirmed)
+    ).toFixed(2);
 
     return (
-        <div className="flex items-start h-screen w-full text-gray-700">
+        <div className="flex items-start h-screen w-full text-gray-400">
             <div
-                className={`h-screen flex flex-col border-r bg-white sidebar ${
+                className={`h-screen flex flex-col border-r border-gray-900 bg-gray-800 sidebar ${
                     sidebar ? "open" : ""
                 }`}
             >
@@ -177,6 +187,15 @@ export default function App() {
                         type="Recovered"
                         value={recovered}
                         percentage={`${recovery}%`}
+                        sm
+                    />
+                    <Card
+                        sm
+                        color="orange-400"
+                        spaced
+                        type="Still sick"
+                        value={confirmed - recovered}
+                        percentage={`${stillSick}%`}
                     />
                     <Card
                         color="red-400"
@@ -184,8 +203,10 @@ export default function App() {
                         value={deaths}
                         percentage={`${morbility}%`}
                         noBorderRight
+                        sm
                     />
                 </div>
+
                 <CountryList />
             </div>
             <EmMap sidebar={sidebar} setSidebar={setSidebar} />

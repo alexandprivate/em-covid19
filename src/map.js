@@ -58,10 +58,10 @@ function CustomMaker({ country }) {
     return (
         <CircleMarker
             center={[lat, long]}
-            color="none"
-            fillColor="#2A4365"
-            fillOpacity={1}
-            radius={7}
+            color="#63B3ED"
+            fillColor="#63B3ED"
+            fillOpacity={0.6}
+            radius={6}
         >
             <Popup>
                 <MapContent
@@ -112,7 +112,7 @@ export default function EmMap({ sidebar, setSidebar }) {
                         zoom={3}
                         maxZoom={10}
                         minZoom={3}
-                        style={{ background: "#63B3ED" }}
+                        style={{ background: "#2D3748" }}
                     >
                         <button
                             className="absolute top-0 right-0 bg-white text-black text-base items-center px-3 font-bold sidebar-controler"
@@ -137,10 +137,10 @@ export default function EmMap({ sidebar, setSidebar }) {
                             pointerEvents="none"
                             style={{
                                 stroke: true,
-                                color: "#2B6CB0",
+                                color: "#2D3748",
                                 weight: 2,
                                 fill: true,
-                                fillColor: "#3182CE",
+                                fillColor: "#1A202C",
                                 fillOpacity: 1
                             }}
                         />
