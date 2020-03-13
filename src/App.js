@@ -90,8 +90,7 @@ function CountryListItem({
     );
 }
 
-function CountryList() {
-    const { countries, loading } = useCountries();
+function CountryList({ countries, loading }) {
     const [filter, setFilter] = React.useState("");
 
     let filtered = countries.filter(({ countryRegion }) =>
@@ -144,6 +143,7 @@ function CountryList() {
 
 export default function App() {
     let { stats, loading } = useStats(null);
+    let { countries, loading: loadingCountries } = useCountries();
     const [sidebar, setSidebar] = React.useState(false);
 
     if (loading)
@@ -206,10 +206,14 @@ export default function App() {
                         sm
                     />
                 </div>
-
-                <CountryList />
+                <CountryList countries={countries} loading={loadingCountries} />
             </div>
-            <EmMap sidebar={sidebar} setSidebar={setSidebar} />
+            <EmMap
+                sidebar={sidebar}
+                setSidebar={setSidebar}
+                countries={countries}
+                loading={loading}
+            />
         </div>
     );
 }

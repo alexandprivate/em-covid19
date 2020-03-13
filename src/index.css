@@ -66,18 +66,23 @@ code {
         position: absolute;
         top: 0;
         right: -350px;
+
         z-index: 9999999;
         transition: all 0.3s ease;
     }
 
     .sidebar.open {
         right: 0;
+        width: auto;
+        max-width: 350px;
         box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease;
     }
+
     .sidebar-controler {
         display: flex;
     }
+
     .close-sidebar {
         display: block;
     }

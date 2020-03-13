@@ -86,8 +86,7 @@ function CustomMaker({ country }) {
     );
 }
 
-export default function EmMap({ sidebar, setSidebar }) {
-    const { countries, loading } = useCountries();
+export default function EmMap({ sidebar, setSidebar, countries, loading }) {
     const [geo, setGeo] = React.useState(null);
     let hasCountries = countries.length > 0;
 
