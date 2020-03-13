@@ -96,20 +96,25 @@ function CountryList({ countries, loading }) {
     let filtered = countries.filter(({ countryRegion }) =>
         countryRegion.toLowerCase().includes(filter.toLowerCase())
     );
-    console.log({ filtered });
+
+    let inputRef = React.useRef(null);
 
     return (
         <div className="overflow-auto h-full h-auto border-t border-gray-900">
             {loading && <Preloader />}
             <div className="px-5 bg-gray-800 flex items-center justify-center py-3 sticky top-0">
-                <button className="pointer-events-none h-12 px-2 border-t border-l border-b border-gray-900 rounded-l bg-gray-700 ">
+                <button
+                    className="h-12 px-2 border-t border-l border-b border-gray-900 rounded-l bg-gray-700 focus:outline-none"
+                    onClick={() => inputRef.current.focus()}
+                >
                     <FiSearch></FiSearch>
                 </button>
                 <input
                     type="search"
+                    ref={inputRef}
                     onChange={e => setFilter(e.target.value)}
                     placeholder="Search country"
-                    className="w-full h-12 px-4 border-gray-900 bg-gray-700 border rounded-r text-lg"
+                    className="w-full h-12 px-4 border-gray-900 bg-gray-700 border rounded-r text-lg focus:outline-none"
                 />
             </div>
             {filtered.map(
@@ -193,7 +198,7 @@ export default function App() {
                         sm
                         color="orange-400"
                         spaced
-                        type="Still sick"
+                        type="Still Sick"
                         value={confirmed - recovered}
                         percentage={`${stillSick}%`}
                     />
