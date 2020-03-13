@@ -39,7 +39,7 @@ function Card({
         >
             <p
                 className={`${
-                    sm ? "text-xl" : "text-4xl"
+                    sm ? "text-xl" : "text-6xl"
                 } font-bold leading-none text-${color}`}
             >
                 {value}
