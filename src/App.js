@@ -16,7 +16,8 @@ function Title({ lastUpdate }) {
             </h1>
             <div className="flex flex-col">
                 <span className="font-bold uppercase leading-relaxed text-blue-400 uppercase leading-relaxed text-sm block">
-                    Everymundo
+                    <span className="text-gray-600 font-normal">Every</span>
+                    mundo
                 </span>
                 <span className="text-xs text-gray-600">
                     Last update: {m}/{d}/{y}
