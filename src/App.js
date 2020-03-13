@@ -11,8 +11,8 @@ function Title({ lastUpdate }) {
     let y = new Date(lastUpdate).getFullYear();
     return (
         <div className="py-5 text-center">
-            <h1 className="uppercase text-center uppercase pb-2 text-2xl leading-none">
-                COVID-19 Stats
+            <h1 className="uppercase text-center uppercase pb-2 text-xl leading-none">
+                <strong>COVID-19</strong> Worldwide Stats
             </h1>
             <div className="flex flex-col">
                 <span className="text-xs text-gray-500">
