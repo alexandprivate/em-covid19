@@ -45,7 +45,7 @@ function MapContent({
     );
 }
 
-function CustomMaker({ country }) {
+function CustomMaker({ country, formatNumber }) {
     const {
         provinceState,
         countryRegion,
@@ -65,9 +65,9 @@ function CustomMaker({ country }) {
         >
             <Popup>
                 <MapContent
-                    deaths={deaths}
-                    confirmed={confirmed}
-                    recovered={recovered}
+                    deaths={formatNumber(deaths)}
+                    confirmed={formatNumber(confirmed)}
+                    recovered={formatNumber(recovered)}
                     countryRegion={countryRegion}
                     provinceState={provinceState}
                 ></MapContent>
@@ -75,9 +75,9 @@ function CustomMaker({ country }) {
             <Tooltip direction="top">
                 <MapContent
                     stats={false}
-                    deaths={deaths}
-                    confirmed={confirmed}
-                    recovered={recovered}
+                    deaths={formatNumber(deaths)}
+                    confirmed={formatNumber(confirmed)}
+                    recovered={formatNumber(recovered)}
                     countryRegion={countryRegion}
                     provinceState={provinceState}
                 ></MapContent>
@@ -86,7 +86,13 @@ function CustomMaker({ country }) {
     );
 }
 
-export default function EmMap({ sidebar, setSidebar, countries, loading }) {
+export default function EmMap({
+    sidebar,
+    setSidebar,
+    countries,
+    loading,
+    formatNumber
+}) {
     const [geo, setGeo] = React.useState(null);
     let hasCountries = countries.length > 0;
 
@@ -144,7 +150,11 @@ export default function EmMap({ sidebar, setSidebar, countries, loading }) {
                             }}
                         />
                         {countries.map((country, index) => (
-                            <CustomMaker key={index} country={country} />
+                            <CustomMaker
+                                key={index}
+                                country={country}
+                                formatNumber={formatNumber}
+                            />
                         ))}
                     </Map>
                 </div>

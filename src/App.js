@@ -90,7 +90,7 @@ function CountryListItem({
     );
 }
 
-function CountryList({ countries, loading }) {
+function CountryList({ countries, loading, formatNumber }) {
     const [filter, setFilter] = React.useState("");
 
     let filtered = countries.filter(({ countryRegion }) =>
@@ -133,9 +133,9 @@ function CountryList({ countries, loading }) {
                         key={index}
                     >
                         <CountryListItem
-                            deaths={deaths}
-                            confirmed={confirmed}
-                            recovered={recovered}
+                            deaths={formatNumber(deaths)}
+                            confirmed={formatNumber(confirmed)}
+                            recovered={formatNumber(recovered)}
                             countryRegion={countryRegion}
                             provinceState={provinceState}
                         />
@@ -170,6 +170,9 @@ export default function App() {
         Number(confirmed)
     ).toFixed(2);
 
+    let formatNumber = num =>
+        num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+
     return (
         <div className="flex items-start h-screen w-full text-gray-400">
             <div
@@ -184,13 +187,17 @@ export default function App() {
                     &times;
                 </button>
                 <Title lastUpdate={lastUpdate} />
-                <Card type="Confirmed" value={confirmed} noBorderRight />
+                <Card
+                    type="Confirmed"
+                    value={formatNumber(confirmed)}
+                    noBorderRight
+                />
                 <div className="flex items-center">
                     <Card
                         color="green-400"
                         spaced
                         type="Recovered"
-                        value={recovered}
+                        value={formatNumber(recovered)}
                         percentage={`${recovery}%`}
                         sm
                     />
@@ -199,21 +206,26 @@ export default function App() {
                         color="orange-400"
                         spaced
                         type="Still Sick"
-                        value={confirmed - recovered}
+                        value={formatNumber(confirmed - recovered)}
                         percentage={`${stillSick}%`}
                     />
                     <Card
                         color="red-400"
                         type="Deaths"
-                        value={deaths}
+                        value={formatNumber(deaths)}
                         percentage={`${morbility}%`}
                         noBorderRight
                         sm
                     />
                 </div>
-                <CountryList countries={countries} loading={loadingCountries} />
+                <CountryList
+                    formatNumber={formatNumber}
+                    countries={countries}
+                    loading={loadingCountries}
+                />
             </div>
             <EmMap
+                formatNumber={formatNumber}
                 sidebar={sidebar}
                 setSidebar={setSidebar}
                 countries={countries}
