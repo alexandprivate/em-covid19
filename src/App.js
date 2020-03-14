@@ -4,6 +4,7 @@ import Preloader from "./preloader";
 import useStats from "./useStats";
 import useCountries from "./useCountries";
 import { FiMapPin, FiCalendar, FiClock } from "react-icons/fi";
+import { MdClose } from "react-icons/md";
 
 function Title({ lastUpdate }) {
     let m = new Date(lastUpdate).getMonth() + 1;
@@ -176,10 +177,13 @@ export default function App() {
                 }`}
             >
                 <button
-                    className="absolute top-0 left-0 text-xl h-8 w-8 close-sidebar"
+                    className=" mx-auto text-xs h-8 close-sidebar"
                     onClick={() => setSidebar(false)}
                 >
-                    &times;
+                    <span className="flex items-center">
+                        <MdClose className="mr-2" />
+                        Close
+                    </span>
                 </button>
                 <Title lastUpdate={lastUpdate} />
                 <Card

@@ -55,11 +55,20 @@ function CustomMaker({ country, formatNumber }) {
         deaths,
         recovered
     } = country;
+
+    let getColor = () => {
+        return countryRegion === "Ecuador" ||
+            provinceState === "Hong Kong" ||
+            provinceState === "New York" ||
+            provinceState === "Florida"
+            ? "#F6AD55"
+            : "#63B3ED";
+    };
     return (
         <CircleMarker
             center={[lat, long]}
-            color="#63B3ED"
-            fillColor="#63B3ED"
+            color={getColor()}
+            fillColor={getColor()}
             fillOpacity={0.6}
             radius={6}
         >
@@ -122,6 +131,21 @@ export default function EmMap({
                             <FiList className="mr-2" />{" "}
                             {sidebar ? "Close" : "Open"} Stats
                         </button>
+                        <div
+                            className="absolute bottom-0 left-0 bg-white text-black text-sm px-3 py-2"
+                            style={{
+                                marginBottom: 12,
+                                marginLeft: 10,
+                                boxShadow: "0 1px 5px rgba(0,0,0,0.65)",
+                                zIndex: 999999,
+                                borderRadius: 2
+                            }}
+                        >
+                            <span className="flex items-center uppercase text-xs">
+                                <span className="h-3 w-3 mr-2 rounded-full bg-orange-400"></span>
+                                Everymundo Offices
+                            </span>
+                        </div>
                         <GeoJSON
                             data={MyGeo}
                             clickable={false}
@@ -129,11 +153,11 @@ export default function EmMap({
                             bubblingMouseEvents={false}
                             pointerEvents="none"
                             style={{
+                                fillColor: "#1A202C",
                                 stroke: true,
                                 color: "#2D3748",
                                 weight: 2,
                                 fill: true,
-                                fillColor: "#1A202C",
                                 fillOpacity: 1
                             }}
                         />
