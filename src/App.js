@@ -112,7 +112,7 @@ function CountryList({ countries, loading, formatNumber }) {
                     ref={inputRef}
                     onChange={e => setFilter(e.target.value)}
                     placeholder="Search country"
-                    className="w-full h-12 px-4 border-gray-900 bg-gray-700 border rounded-r text-lg focus:outline-none"
+                    className="w-full h-12 px-4 border-gray-900 bg-gray-700 border text-lg focus:outline-none"
                 />
             </div>
             {filtered.map(
