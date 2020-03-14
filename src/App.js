@@ -3,20 +3,24 @@ import EmMap from "./map";
 import Preloader from "./preloader";
 import useStats from "./useStats";
 import useCountries from "./useCountries";
-import { FiMapPin, FiSearch } from "react-icons/fi";
+import { FiMapPin, FiCalendar, FiClock } from "react-icons/fi";
 
 function Title({ lastUpdate }) {
     let m = new Date(lastUpdate).getMonth() + 1;
     let d = new Date(lastUpdate).getDate();
     let y = new Date(lastUpdate).getFullYear();
+    let h = new Date(lastUpdate).getHours();
+    let mm = new Date(lastUpdate).getMinutes();
+
     return (
         <div className="py-5 text-center">
             <h1 className="uppercase text-center uppercase pb-2 text-xl leading-none">
                 <strong>COVID-19</strong> Worldwide Stats
             </h1>
             <div className="flex flex-col">
-                <span className="text-xs text-gray-500">
-                    Last update: {m}/{d}/{y}
+                <span className="text-xs text-gray-500 flex items-center justify-center">
+                    <FiCalendar className="ml-2 mr-1" /> {m}/{d}/{y}{" "}
+                    <FiClock className="ml-2 mr-1" /> {h}:{mm}
                 </span>
             </div>
         </div>
@@ -103,12 +107,6 @@ function CountryList({ countries, loading, formatNumber }) {
         <div className="overflow-auto h-full h-auto border-t border-gray-900">
             {loading && <Preloader />}
             <div className="px-5 bg-gray-800 flex items-center justify-center py-3 sticky top-0">
-                <button
-                    className="h-12 px-2 border-t border-l border-b border-gray-900 rounded-l bg-gray-700 focus:outline-none"
-                    onClick={() => inputRef.current.focus()}
-                >
-                    <FiSearch></FiSearch>
-                </button>
                 <input
                     type="search"
                     ref={inputRef}
@@ -147,7 +145,7 @@ function CountryList({ countries, loading, formatNumber }) {
 }
 
 export default function App() {
-    let { stats, loading } = useStats(null);
+    let { stats, loading } = useStats();
     let { countries, loading: loadingCountries } = useCountries();
     const [sidebar, setSidebar] = React.useState(false);
 
@@ -158,10 +156,12 @@ export default function App() {
             </div>
         );
 
-    let { value: confirmed } = stats.confirmed;
+    let { value: confirmed = {} } = stats.confirmed;
     let { value: recovered } = stats.recovered;
     let { value: deaths } = stats.deaths;
     let { lastUpdate } = stats;
+
+    console.log({ lastUpdate });
 
     let morbility = ((Number(deaths) * 100) / Number(confirmed)).toFixed(2);
     let recovery = ((Number(recovered) * 100) / Number(confirmed)).toFixed(2);

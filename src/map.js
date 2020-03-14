@@ -1,5 +1,4 @@
 import React from "react";
-import useCountries from "./useCountries";
 import { Map, GeoJSON, CircleMarker, Popup, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Preloader from "./preloader";
