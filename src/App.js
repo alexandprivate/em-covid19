@@ -158,8 +158,6 @@ export default function App() {
     let { value: deaths } = stats.deaths;
     let { lastUpdate } = stats;
 
-    console.log({ lastUpdate });
-
     let morbility = ((Number(deaths) * 100) / Number(confirmed)).toFixed(2);
     let recovery = ((Number(recovered) * 100) / Number(confirmed)).toFixed(2);
     let stillSick = (
