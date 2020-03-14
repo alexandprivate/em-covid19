@@ -3,6 +3,7 @@ import { Map, GeoJSON, CircleMarker, Popup, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Preloader from "./preloader";
 import { FiList } from "react-icons/fi";
+import MyGeo from "./geo.json";
 
 function MapContent({
     provinceState,
@@ -92,27 +93,13 @@ export default function EmMap({
     loading,
     formatNumber
 }) {
-    const [geo, setGeo] = React.useState(null);
     let hasCountries = countries.length > 0;
-
-    let getGEOJSON = () => {
-        fetch(
-            "https://em-frontend-assets.airtrfx.com/assets/map-tiles/world-countries-usa-states.json"
-        )
-            .then(res => res.json())
-            .then(res => setGeo(res))
-            .catch(e => console.log("Error loading map:", e));
-    };
-
-    React.useEffect(() => {
-        getGEOJSON();
-    }, []);
 
     return (
         <>
             <div className="h-screen flex-1 items-center justify-center">
-                {(loading || !geo) && <Preloader></Preloader>}
-                {hasCountries && geo && (
+                {loading && <Preloader></Preloader>}
+                {hasCountries && (
                     <Map
                         center={[40.456974, -3.763064]}
                         zoom={3}
@@ -136,7 +123,7 @@ export default function EmMap({
                             {sidebar ? "Close" : "Open"} Stats
                         </button>
                         <GeoJSON
-                            data={geo}
+                            data={MyGeo}
                             clickable={false}
                             interactive={false}
                             bubblingMouseEvents={false}

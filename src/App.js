@@ -104,7 +104,7 @@ function CountryList({ countries, loading, formatNumber }) {
     return (
         <div className="overflow-auto h-full h-auto border-t border-gray-900">
             {loading && <Preloader />}
-            <div className="px-5 bg-gray-800 flex items-center justify-center py-3 sticky top-0">
+            <div className="px-5 bg-gray-800 flex items-center justify-center py-3">
                 <input
                     type="search"
                     onChange={e => setFilter(e.target.value)}
@@ -187,7 +187,7 @@ export default function App() {
                     value={formatNumber(confirmed)}
                     noBorderRight
                 />
-                <div className="flex items-center">
+                <div className="flex items-stretch">
                     <Card
                         color="green-400"
                         spaced
