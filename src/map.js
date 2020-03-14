@@ -107,10 +107,12 @@ export default function EmMap({
     React.useEffect(() => {
         getGEOJSON();
     }, []);
+
     return (
         <>
-            {hasCountries && geo ? (
-                <div className="h-screen flex-1">
+            <div className="h-screen flex-1 items-center justify-center">
+                {(loading || !geo) && <Preloader></Preloader>}
+                {hasCountries && geo && (
                     <Map
                         center={[40.456974, -3.763064]}
                         zoom={3}
@@ -156,10 +158,8 @@ export default function EmMap({
                             />
                         ))}
                     </Map>
-                </div>
-            ) : loading ? (
-                <Preloader />
-            ) : null}
+                )}
+            </div>
         </>
     );
 }

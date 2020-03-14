@@ -101,15 +101,12 @@ function CountryList({ countries, loading, formatNumber }) {
         countryRegion.toLowerCase().includes(filter.toLowerCase())
     );
 
-    let inputRef = React.useRef(null);
-
     return (
         <div className="overflow-auto h-full h-auto border-t border-gray-900">
             {loading && <Preloader />}
             <div className="px-5 bg-gray-800 flex items-center justify-center py-3 sticky top-0">
                 <input
                     type="search"
-                    ref={inputRef}
                     onChange={e => setFilter(e.target.value)}
                     placeholder="Search country"
                     className="w-full h-12 px-4 border-gray-900 bg-gray-700 border text-lg focus:outline-none"
@@ -174,7 +171,7 @@ export default function App() {
         num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
     return (
-        <div className="flex items-start h-screen w-full text-gray-400">
+        <div className="flex items-start bg-gray-800 h-screen w-full text-gray-400">
             <div
                 className={`h-screen flex flex-col border-r border-gray-900 bg-gray-800 sidebar ${
                     sidebar ? "open" : ""
