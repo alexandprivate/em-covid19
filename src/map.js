@@ -64,13 +64,19 @@ function CustomMaker({ country, formatNumber }) {
             ? "#F6AD55"
             : "#63B3ED";
     };
+
+    let size = () => {
+        let relation = confirmed / 2 / 500;
+        return relation < 3 ? 3 : relation;
+    };
+
     return (
         <CircleMarker
             center={[lat, long]}
             color={getColor()}
             fillColor={getColor()}
             fillOpacity={0.6}
-            radius={6}
+            radius={size()}
         >
             <Popup>
                 <MapContent
@@ -104,13 +110,18 @@ export default function EmMap({
 }) {
     let hasCountries = countries.length > 0;
 
+    let mapRef = React.useRef(null);
+
+    let mapBounds = () => countries.map(country => [country.lat, country.long]);
+
     return (
         <>
             <div className="h-screen flex-1 items-center justify-center">
                 {loading && <Preloader></Preloader>}
                 {hasCountries && (
                     <Map
-                        center={[40.456974, -3.763064]}
+                        ref={mapRef}
+                        bounds={mapBounds()}
                         zoom={3}
                         maxZoom={10}
                         minZoom={3}
