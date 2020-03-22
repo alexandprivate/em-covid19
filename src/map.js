@@ -125,7 +125,7 @@ export default function EmMap({
                         zoom={3}
                         maxZoom={10}
                         minZoom={3}
-                        style={{ background: "#2D3748" }}
+                        style={{ background: "#1A202C" }}
                     >
                         <button
                             className="absolute top-0 right-0 bg-white text-black text-base items-center px-3 font-bold sidebar-controler"
@@ -164,9 +164,9 @@ export default function EmMap({
                             bubblingMouseEvents={false}
                             pointerEvents="none"
                             style={{
-                                fillColor: "#1A202C",
+                                fillColor: "#2D3748",
                                 stroke: true,
-                                color: "#2D3748",
+                                color: "#1A202C",
                                 weight: 2,
                                 fill: true,
                                 fillOpacity: 1

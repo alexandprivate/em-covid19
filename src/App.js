@@ -14,7 +14,7 @@ function Title({ lastUpdate }) {
     let mm = new Date(lastUpdate).getMinutes();
 
     return (
-        <div className="py-5 text-center">
+        <div className="py-2 text-center">
             <h1 className="uppercase text-center uppercase pb-2 text-xl leading-none">
                 <strong>COVID-19</strong> Worldwide Stats
             </h1>
@@ -38,7 +38,7 @@ function Card({
 }) {
     return (
         <div
-            className={`w-full border-gray-900 p-5 border-t ${
+            className={`w-full border-gray-800 p-5 border-t ${
                 noBorderRight ? "" : "border-r"
             }`}
         >
@@ -103,14 +103,14 @@ function CountryList({ countries, loading, formatNumber }) {
     );
 
     return (
-        <div className="overflow-auto h-full h-auto border-t border-gray-900">
+        <div className="overflow-auto h-full h-auto border-t border-gray-800">
             {loading && <Preloader />}
-            <div className="px-5 bg-gray-800 flex items-center justify-center py-3">
+            <div className="px-5 bg-gray-900 flex items-center justify-center py-3">
                 <input
                     type="search"
                     onChange={e => setFilter(e.target.value)}
                     placeholder="Search country"
-                    className="w-full h-12 px-4 border-gray-900 bg-gray-700 border text-lg focus:outline-none"
+                    className="w-full h-12 px-4 border-gray-700 bg-gray-800 border text-lg focus:outline-none"
                 />
             </div>
             {filtered.map(
@@ -125,7 +125,7 @@ function CountryList({ countries, loading, formatNumber }) {
                     index
                 ) => (
                     <div
-                        className="w-full border-b border-gray-900 px-5 py-3"
+                        className="w-full border-b border-gray-800 px-5 py-3"
                         key={index}
                     >
                         <CountryListItem
@@ -170,20 +170,18 @@ export default function App() {
         num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
     return (
-        <div className="flex items-start bg-gray-800 h-screen w-full text-gray-400">
+        <div className="flex items-start bg-gray-900 h-screen w-full text-gray-500">
             <div
-                className={`h-screen flex flex-col border-r border-gray-900 bg-gray-800 sidebar ${
+                className={`h-screen flex flex-col border-r border-gray-800 bg-gray-900 sidebar ${
                     sidebar ? "open" : ""
                 }`}
             >
                 <button
-                    className=" mx-auto text-xs h-8 close-sidebar"
+                    className="mx-auto text-sm h-12 close-sidebar flex items-center"
                     onClick={() => setSidebar(false)}
                 >
-                    <span className="flex items-center">
-                        <MdClose className="mr-2" />
-                        Close
-                    </span>
+                    <MdClose className="mr-2 inline-block" />
+                    Close
                 </button>
                 <Title lastUpdate={lastUpdate} />
                 <Card
