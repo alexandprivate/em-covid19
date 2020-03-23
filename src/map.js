@@ -11,13 +11,13 @@ function MapContent({
     confirmed,
     recovered,
     deaths,
-    stats = true
+    stats = true,
+    combinedKey
 }) {
     return (
         <>
             <span className="text-sm">
-                {provinceState ? <span>{provinceState}, </span> : ""}
-                {countryRegion}
+                <span>{combinedKey}</span>
             </span>
             {stats && (
                 <span className="mt-2 block text-left leading-none">
@@ -53,8 +53,11 @@ function CustomMaker({ country, formatNumber }) {
         long,
         confirmed,
         deaths,
-        recovered
+        recovered,
+        combinedKey
     } = country;
+
+    console.log({ country });
 
     let getColor = () => {
         return countryRegion === "Ecuador" ||
@@ -95,6 +98,7 @@ function CustomMaker({ country, formatNumber }) {
                     recovered={formatNumber(recovered)}
                     countryRegion={countryRegion}
                     provinceState={provinceState}
+                    combinedKey={combinedKey}
                 ></MapContent>
             </Tooltip>
         </CircleMarker>
@@ -108,11 +112,12 @@ export default function EmMap({
     loading,
     formatNumber
 }) {
-    let hasCountries = countries.length > 0;
+    const hasCountries = countries.length > 0;
 
-    let mapRef = React.useRef(null);
+    const mapRef = React.useRef(null);
 
-    let mapBounds = () => countries.map(country => [country.lat, country.long]);
+    const mapBounds = () =>
+        countries.map(country => [country.lat, country.long]);
 
     return (
         <>
