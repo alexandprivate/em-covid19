@@ -57,7 +57,11 @@ function CustomMaker({ country, formatNumber }) {
         combinedKey
     } = country;
 
-    console.log({ country });
+    if (lat === null || long === null) {
+        return null;
+    }
+
+    console.log({ countryRegion });
 
     let getColor = () => {
         return countryRegion === "Ecuador" ||
