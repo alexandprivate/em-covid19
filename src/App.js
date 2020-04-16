@@ -5,6 +5,7 @@ import useStats from "./useStats";
 import useCountries from "./useCountries";
 import { FiMapPin, FiCalendar, FiClock } from "react-icons/fi";
 import { MdClose } from "react-icons/md";
+import useCounty from "./useCounty";
 
 function Title({ lastUpdate }) {
     let m = new Date(lastUpdate).getMonth() + 1;
@@ -34,11 +35,11 @@ function Card({
     color = "blue-400",
     percentage = "",
     noBorderRight = false,
-    sm = false
+    sm = false,
 }) {
     return (
         <div
-            className={`w-full border-gray-800 p-5 border-t ${
+            className={`w-full border-gray-800 p-3 border-t ${
                 noBorderRight ? "" : "border-r"
             }`}
         >
@@ -57,25 +58,18 @@ function Card({
     );
 }
 
-function CountryListItem({
-    provinceState,
-    countryRegion,
-    confirmed,
-    recovered,
-    deaths
-}) {
+function CountryListItem({ cases, recovered, deaths, country }) {
     return (
         <>
             <span className="text-base flex items-center font-bold">
                 <FiMapPin className="text-gray-500 mr-1" />
-                {provinceState ? <span>{provinceState}, </span> : ""}
-                {countryRegion}
+                {country}
             </span>
             <span className="flex items-center justify-between mt-3 block text-left leading-none">
                 <span className="mb-1 block text-sm  flex-1">
-                    Confirmed
+                    cases
                     <span className="font-bold block text-blue-500 text-base mt-1">
-                        {confirmed}
+                        {cases}
                     </span>
                 </span>
                 <span className="mb-1 block text-sm  flex-1">
@@ -98,8 +92,8 @@ function CountryListItem({
 function CountryList({ countries, loading, formatNumber }) {
     const [filter, setFilter] = React.useState("");
 
-    let filtered = countries.filter(({ countryRegion }) =>
-        countryRegion.toLowerCase().includes(filter.toLowerCase())
+    const filtered = countries.filter(({ country }) =>
+        country.toLowerCase().includes(filter.toLowerCase())
     );
 
     return (
@@ -108,43 +102,33 @@ function CountryList({ countries, loading, formatNumber }) {
             <div className="px-5 bg-gray-900 flex items-center justify-center py-3">
                 <input
                     type="search"
-                    onChange={e => setFilter(e.target.value)}
+                    onChange={(e) => setFilter(e.target.value)}
                     placeholder="Search country"
                     className="w-full h-12 px-4 border-gray-700 bg-gray-800 border text-lg focus:outline-none"
                 />
             </div>
-            {filtered.map(
-                (
-                    {
-                        deaths,
-                        confirmed,
-                        recovered,
-                        countryRegion,
-                        provinceState
-                    },
-                    index
-                ) => (
-                    <div
-                        className="w-full border-b border-gray-800 px-5 py-3"
-                        key={index}
-                    >
-                        <CountryListItem
-                            deaths={formatNumber(deaths)}
-                            confirmed={formatNumber(confirmed)}
-                            recovered={formatNumber(recovered)}
-                            countryRegion={countryRegion}
-                            provinceState={provinceState}
-                        />
-                    </div>
-                )
-            )}
+            {filtered.map(({ deaths, cases, recovered, country }, index) => (
+                <div
+                    className="w-full border-b border-gray-800 px-5 py-3"
+                    key={index}
+                >
+                    <CountryListItem
+                        country={country}
+                        deaths={formatNumber(deaths)}
+                        cases={formatNumber(cases)}
+                        recovered={formatNumber(recovered)}
+                    />
+                </div>
+            ))}
         </div>
     );
 }
 
 export default function App() {
-    let { stats, loading } = useStats();
-    let { countries, loading: loadingCountries } = useCountries();
+    const { stats, loading } = useStats();
+    const { county: FL, loading: loadingFL } = useCounty("Florida");
+    const { county: NY, loading: loadingNY } = useCounty("New York");
+    const { countries, loading: loadingCountries } = useCountries();
     const [sidebar, setSidebar] = React.useState(false);
 
     if (loading)
@@ -154,20 +138,22 @@ export default function App() {
             </div>
         );
 
-    let { value: confirmed = {} } = stats.confirmed;
-    let { value: recovered } = stats.recovered;
-    let { value: deaths } = stats.deaths;
-    let { lastUpdate } = stats;
+    const {
+        cases,
+        deaths,
+        recovered,
+        updated: lastUpdate,
+        active: activeCases,
+    } = stats;
 
-    let morbility = ((Number(deaths) * 100) / Number(confirmed)).toFixed(2);
-    let recovery = ((Number(recovered) * 100) / Number(confirmed)).toFixed(2);
-    let stillSick = (
-        ((Number(confirmed) - Number(recovered)) * 100) /
-        Number(confirmed)
-    ).toFixed(2);
+    const morbility = ((Number(deaths) * 100) / Number(cases)).toFixed(2);
+    const recovery = ((Number(recovered) * 100) / Number(cases)).toFixed(2);
 
-    let formatNumber = num =>
-        num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    const stillSick = ((Number(activeCases) * 100) / Number(cases)).toFixed(2);
+
+    const formatNumber = (num) => {
+        return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    };
 
     return (
         <div className="flex items-start bg-gray-900 h-screen w-full text-gray-500">
@@ -186,7 +172,7 @@ export default function App() {
                 <Title lastUpdate={lastUpdate} />
                 <Card
                     type="Confirmed"
-                    value={formatNumber(confirmed)}
+                    value={formatNumber(cases)}
                     noBorderRight
                 />
                 <div className="flex items-stretch">
@@ -203,7 +189,7 @@ export default function App() {
                         color="orange-400"
                         spaced
                         type="Still Sick"
-                        value={formatNumber(confirmed - recovered)}
+                        value={formatNumber(activeCases)}
                         percentage={`${stillSick}%`}
                     />
                     <Card
@@ -222,6 +208,8 @@ export default function App() {
                 />
             </div>
             <EmMap
+                FL={FL}
+                NY={NY}
                 formatNumber={formatNumber}
                 sidebar={sidebar}
                 setSidebar={setSidebar}
