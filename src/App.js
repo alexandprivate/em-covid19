@@ -126,8 +126,8 @@ function CountryList({ countries, loading, formatNumber }) {
 
 export default function App() {
     const { stats, loading } = useStats();
-    const { county: FL, loading: loadingFL } = useCounty("Florida");
-    const { county: NY, loading: loadingNY } = useCounty("New York");
+    const { county: FL } = useCounty("Florida");
+    const { county: NY } = useCounty("New York");
     const { countries, loading: loadingCountries } = useCountries();
     const [sidebar, setSidebar] = React.useState(false);
 
